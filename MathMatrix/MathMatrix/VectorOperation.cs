@@ -2,7 +2,7 @@ using System;
 
 namespace MathMatrix
 {
-    public static class VectorAction
+    public static class VectorOperation
     {
         public static double ScalarMultiplyVectors(Vector vector1, Vector vector2)
         {
