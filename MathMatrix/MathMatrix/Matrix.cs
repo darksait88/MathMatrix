@@ -180,7 +180,12 @@ namespace MathMatrix
                     else
                         continue;
             }
-            return tempMatrix;
+            for (int i = 0; i < tempMatrix.Rows; i++)
+                for (int j = halfCountColumns; j < tempMatrix.Columns; j++)
+                {
+                    reverseMatrix[i, j - halfCountColumns] = tempMatrix[i, j];
+                }
+            return reverseMatrix;
         }
 
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
