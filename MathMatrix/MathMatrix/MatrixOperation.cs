@@ -23,5 +23,12 @@ namespace MathMatrix
                     newMatrix[i,j] = newMatrix[i, j] * scalar;
             return newMatrix;
         }
+        public static Matrix SingleMatrix(int size)
+        {
+            Matrix matrix = new Matrix(size, size);
+            for (int i = 0; i < size; i++)
+                matrix[i, i] = 1;
+            return matrix;
+        }
     }
 }

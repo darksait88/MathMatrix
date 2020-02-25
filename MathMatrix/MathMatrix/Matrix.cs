@@ -143,6 +143,45 @@ namespace MathMatrix
             int num = random.Next(from, to + 1);
             return num;
         }
+        public double EuNormMatrix()
+        {
+            double norm = 0;
+            for (int i = 0; i < Rows; i++)
+                for(int j = 0; j < Columns; j++)
+                    norm += this[i,j] * this[i, j];
+            norm = Math.Sqrt(norm);
+            return norm;
+        }
+        public Matrix ReverseMatrix()
+        {
+            if (Rows != Columns)
+                throw new Exception("Reverse matrix exists only for a square matrix");
+            Matrix reverseMatrix = new Matrix(Rows, Columns);
+            Matrix tempMatrix = new Matrix(Rows, Columns * 2);
+            Matrix singleMatrix = MatrixOperation.SingleMatrix(Rows);
+            int halfCountColumns = tempMatrix.Columns / 2;
+            for (int i = 0; i < tempMatrix.Rows; i++)
+                for(int j = 0; j < tempMatrix.Columns; j++)
+                    tempMatrix[i, j] = j < halfCountColumns ? this[i, j] : singleMatrix[i, j - halfCountColumns];
+            for(int i = 0; i < tempMatrix.Rows; i++)
+            {
+                double firstElement = tempMatrix[i, i];
+                for (int j = i; j < tempMatrix.Columns; j++)
+                    tempMatrix[i, j] = tempMatrix[i, j] / firstElement;
+                for (int k = 0; k < tempMatrix.Rows; k++)
+                    if (k != i)
+                    {
+                        firstElement = tempMatrix[k, i];
+                        for (int l = i; l < tempMatrix.Columns; l++)
+                        {
+                            tempMatrix[k, l] = tempMatrix[k, l] - firstElement * tempMatrix[i, l];
+                        }
+                    }
+                    else
+                        continue;
+            }
+            return tempMatrix;
+        }
 
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
         {
@@ -174,24 +213,21 @@ namespace MathMatrix
                     newMatrix[i, j] = VectorOperation.ScalarMultiplyVectors(new Vector(matrix1.GetRow(i)), new Vector(matrix2.GetColumn(j)));
             return newMatrix;
         }
-        public static Matrix operator *(Matrix currentMatrix, Vector vector)
+        public static dynamic operator *(Matrix currentMatrix, Vector vector)
         {
             if (!vector.Transposed)
             {
                 if (currentMatrix.Columns != vector.Count)
                     throw new Exception("Count columns matrix1 don't equals count element vector");
-                Matrix newMatrix = new Matrix(currentMatrix.Rows, 1);
-                for (int i = 0; i < newMatrix.Rows; i++)
-                    for (int j = 0; j < newMatrix.Columns; j++)
-                        newMatrix[i, j] = VectorOperation.ScalarMultiplyVectors(new Vector(currentMatrix.GetRow(i)), vector);
-                return newMatrix;
+                Vector newVector = new Vector(currentMatrix.Rows);
+                for (int i = 0; i < newVector.Count; i++)
+                    newVector[i] = VectorOperation.ScalarMultiplyVectors(new Vector(currentMatrix.GetRow(i)), vector);
+                return newVector;
             }
             else
             {
                 if (currentMatrix.Columns > 1)
                     throw new Exception("Matrix have more than 1 columns");
-                if (currentMatrix.Rows != vector.Count)
-                    throw new Exception("Count columns matrix1 don't equals count element vector");
                 double[,] mass = new double[1, vector.Count];
                 for (int i = 0; i < vector.Count; i++)
                     mass[0, i] = vector[i];

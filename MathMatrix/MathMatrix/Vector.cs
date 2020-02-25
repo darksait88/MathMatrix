@@ -75,6 +75,14 @@ namespace MathMatrix
             tr.transposed = true;
             trIsUpdated = true;
         }
+        public double EuNormVector()
+        {
+            double norm = 0;
+            for (int i = 0; i < Count; i++)
+                norm += this[i] * this[i];
+            norm = Math.Sqrt(norm);
+            return norm;
+        }
         public override string ToString()
         {
             StringBuilder text = new StringBuilder();
@@ -100,6 +108,46 @@ namespace MathMatrix
                     text.AppendLine($"| {vector[i, 0].ToString("0.###"), 6} |");
                 }
             return text.ToString();
-        } 
+        }
+        public static Matrix operator *(Vector vector, Matrix currentMatrix)
+        {
+            if (vector.Transposed)
+            {
+                if (currentMatrix.Rows != vector.Count)
+                    throw new Exception("Count element vector don't equals count rows matrix1");
+                Matrix newMatrix = new Matrix(1, currentMatrix.Columns);
+                for (int i = 0; i < newMatrix.Columns; i++)
+                    newMatrix[0, i] = VectorOperation.ScalarMultiplyVectors(new Vector(currentMatrix.GetColumn(i)), vector);
+                return newMatrix;
+            }
+            else
+            {
+                if (currentMatrix.Rows > 1)
+                    throw new Exception("Matrix have more than 1 rows");
+                double[,] mass = new double[vector.Count, 1];
+                for (int i = 0; i < vector.Count; i++)
+                    mass[i, 0] = vector[i];
+                Matrix newMatrix = new Matrix(mass) * currentMatrix;
+                return newMatrix;
+            }
+        }
+        public static Vector operator +(Vector vector1, Vector vector2)
+        {
+            if (vector1.Count != vector2.Count)
+                throw new Exception("Count element vector1 don't equals count element vector2");
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] + vector2[i];
+            return newVector;
+        }
+        public static Vector operator -(Vector vector1, Vector vector2)
+        {
+            if (vector1.Count != vector2.Count)
+                throw new Exception("Count element vector1 don't equals count element vector2");
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] - vector2[i];
+            return newVector;
+        }
     }
 }
