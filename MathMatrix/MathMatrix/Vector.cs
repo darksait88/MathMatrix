@@ -117,7 +117,7 @@ namespace MathMatrix
                     throw new Exception("Count element vector don't equals count rows matrix1");
                 Matrix newMatrix = new Matrix(1, currentMatrix.Columns);
                 for (int i = 0; i < newMatrix.Columns; i++)
-                    newMatrix[0, i] = VectorOperation.ScalarMultiplyVectors(new Vector(currentMatrix.GetColumn(i)), vector);
+                    newMatrix[0, i] = VectorOp.Dot(new Vector(currentMatrix.GetColumn(i)), vector);
                 return newMatrix;
             }
             else
@@ -131,6 +131,20 @@ namespace MathMatrix
                 return newMatrix;
             }
         }
+        public static Vector operator *(Vector vector1, Double scalar)
+        {
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] * scalar;
+            return newVector;
+        }
+        public static Vector operator *(Double scalar, Vector vector1) 
+        {
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] * scalar;
+            return newVector;
+        }
         public static Vector operator +(Vector vector1, Vector vector2)
         {
             if (vector1.Count != vector2.Count)
@@ -140,6 +154,13 @@ namespace MathMatrix
                 newVector[i] = vector1[i] + vector2[i];
             return newVector;
         }
+        public static Vector operator +(Vector vector1, Double scalar)
+        {
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] + scalar;
+            return newVector;
+        }
         public static Vector operator -(Vector vector1, Vector vector2)
         {
             if (vector1.Count != vector2.Count)
@@ -147,6 +168,13 @@ namespace MathMatrix
             Vector newVector = new Vector(vector1.Count);
             for (int i = 0; i < newVector.Count; i++)
                 newVector[i] = vector1[i] - vector2[i];
+            return newVector;
+        }
+        public static Vector operator -(Vector vector1, Double scalar)
+        {
+            Vector newVector = new Vector(vector1.Count);
+            for (int i = 0; i < newVector.Count; i++)
+                newVector[i] = vector1[i] - scalar;
             return newVector;
         }
     }

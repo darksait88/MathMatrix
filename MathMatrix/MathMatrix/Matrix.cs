@@ -158,7 +158,7 @@ namespace MathMatrix
                 throw new Exception("Reverse matrix exists only for a square matrix");
             Matrix reverseMatrix = new Matrix(Rows, Columns);
             Matrix tempMatrix = new Matrix(Rows, Columns * 2);
-            Matrix singleMatrix = MatrixOperation.SingleMatrix(Rows);
+            Matrix singleMatrix = MatrixOp.SingleMatrix(Rows);
             int halfCountColumns = tempMatrix.Columns / 2;
             for (int i = 0; i < tempMatrix.Rows; i++)
                 for(int j = 0; j < tempMatrix.Columns; j++)
@@ -198,6 +198,14 @@ namespace MathMatrix
                     newMatrix[i, j] = matrix1[i, j] + matrix2[i, j];
             return newMatrix;
         }
+        public static Matrix operator +(Matrix currentMatrix, double scalar)
+        {
+            Matrix newMatrix = currentMatrix.Copy();
+            for(int i = 0; i < newMatrix.Rows; i++)
+                for(int j = 0; j < newMatrix.Columns; j++)
+                    newMatrix[i,j] = newMatrix[i, j] + scalar;
+            return newMatrix;
+        }
         public static Matrix operator -(Matrix matrix1, Matrix matrix2)
         {
             if (matrix1.Columns != matrix2.Columns || matrix1.Rows != matrix2.Rows)
@@ -208,6 +216,14 @@ namespace MathMatrix
                     newMatrix[i, j] = matrix1[i, j] - matrix2[i, j];
             return newMatrix;
         }
+        public static Matrix operator -(Matrix currentMatrix, double scalar)
+        {
+            Matrix newMatrix = currentMatrix.Copy();
+            for(int i = 0; i < newMatrix.Rows; i++)
+                for(int j = 0; j < newMatrix.Columns; j++)
+                    newMatrix[i,j] = newMatrix[i, j] - scalar;
+            return newMatrix;
+        }
         public static Matrix operator *(Matrix matrix1, Matrix matrix2)
         {
             if (matrix1.Columns != matrix2.Rows)
@@ -215,7 +231,23 @@ namespace MathMatrix
             Matrix newMatrix = new Matrix(matrix1.Rows, matrix2.Columns);
             for (int i = 0; i < newMatrix.Rows; i++)
                 for (int j = 0; j < newMatrix.Columns; j++)
-                    newMatrix[i, j] = VectorOperation.ScalarMultiplyVectors(new Vector(matrix1.GetRow(i)), new Vector(matrix2.GetColumn(j)));
+                    newMatrix[i, j] = VectorOp.Dot(new Vector(matrix1.GetRow(i)), new Vector(matrix2.GetColumn(j)));
+            return newMatrix;
+        }
+        public static Matrix operator *(Matrix currentMatrix, double scalar)
+        {
+            Matrix newMatrix = currentMatrix.Copy();
+            for(int i = 0; i < newMatrix.Rows; i++)
+                for(int j = 0; j < newMatrix.Columns; j++)
+                    newMatrix[i,j] = newMatrix[i, j] * scalar;
+            return newMatrix;
+        }
+        public static Matrix operator *(double scalar, Matrix currentMatrix)
+        {
+            Matrix newMatrix = currentMatrix.Copy();
+            for(int i = 0; i < newMatrix.Rows; i++)
+                for(int j = 0; j < newMatrix.Columns; j++)
+                    newMatrix[i,j] = newMatrix[i, j] * scalar;
             return newMatrix;
         }
         public static dynamic operator *(Matrix currentMatrix, Vector vector)
@@ -226,7 +258,7 @@ namespace MathMatrix
                     throw new Exception("Count columns matrix1 don't equals count element vector");
                 Vector newVector = new Vector(currentMatrix.Rows);
                 for (int i = 0; i < newVector.Count; i++)
-                    newVector[i] = VectorOperation.ScalarMultiplyVectors(new Vector(currentMatrix.GetRow(i)), vector);
+                    newVector[i] = VectorOp.Dot(new Vector(currentMatrix.GetRow(i)), vector);
                 return newVector;
             }
             else

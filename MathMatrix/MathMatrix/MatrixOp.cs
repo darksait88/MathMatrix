@@ -2,7 +2,7 @@ using System;
 
 namespace MathMatrix
 {
-    public static class MatrixOperation
+    public static class MatrixOp
     {
 
         public static Matrix MultiplyAdamara(Matrix matrix1, Matrix matrix2)
