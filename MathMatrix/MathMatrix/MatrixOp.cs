@@ -15,14 +15,7 @@ namespace MathMatrix
                     newMatrix[i,j] = matrix1[i,j] * matrix2[i,j];
             return newMatrix;
         }
-        public static Matrix MultiplyOnScalar(Matrix currentMatrix, double scalar)
-        {
-            Matrix newMatrix = currentMatrix.Copy();
-            for(int i = 0; i < newMatrix.Rows; i++)
-                for(int j = 0; j < newMatrix.Columns; j++)
-                    newMatrix[i,j] = newMatrix[i, j] * scalar;
-            return newMatrix;
-        }
+
         public static Matrix SingleMatrix(int size)
         {
             Matrix matrix = new Matrix(size, size);
